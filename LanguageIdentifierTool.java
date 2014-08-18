@@ -39,7 +39,7 @@ as unknown language. Notice that this is different from letter n-gram based appr
  This code is still under development. 
  
  Sample command line( See also the main method for sample usage ):
- "LanguageIdentifier /desktop/myfolder/ -o output.txt"
+ "LanguageIdentifier /desktop/myfolder/  
 
 */
 
@@ -69,14 +69,12 @@ public class LanguageIdentifierTool {
     private static String langs[] = {"english", "french", "german", "spanish", "italian", "latin", "portuguese", "dutch", "danish", "swedish"};
 
     public static String USAGE =
-            "USAGE: LanguageIdentifierTool <inputFileORfolderName> <options>\n"
+            "USAGE: LanguageIdentifierTool <inputFileORfolderName>\n"
             + "\nPARAMETERS:\n"
             + "<inputFileORfolderName>\n\t"
             + "full path for input text file or folder name. If the input filename is a folder, all the files in the folder are processed RECURSIVELY."
-            + "\nOPTIONAL:\n"
-            + "-o <outputfilename>\n\tappend the output to the specified file(default: screen output)\n"
             + "\nSAMPLE USAGE(s):\n"
-            + "LanguageIdentifier /desktop/myfolder/ -o output.txt\n"
+            + "LanguageIdentifier /desktop/myfolder/\n"
             + "SAMPLE OUTPUT:\n/desktop/myfolder/myfile.txt	eng 0.7%	ger 97.4%	fre 0.1% ... \n";
             
     public static void main(String args[]) {
@@ -84,7 +82,6 @@ public class LanguageIdentifierTool {
         int argc = args.length;
         String outfile = null, listFile = null, folderPath = "";
         String inputFile[] = new String[1];
-
  
         if (args.length < 1 || args.length > 3) {
             System.out.println(USAGE);
@@ -94,34 +91,7 @@ public class LanguageIdentifierTool {
         // parse options
         boolean error = false;
         inputFile[0] = args[0];
-        for (int i = 0; i < args.length && !error; i++) {
-           /* if (args[i].equalsIgnoreCase("-o")) {
-                if ((i + 1) < args.length) {
-                    outfile = args[i + 1];
-                    i++;
-                } else {
-                    error = true;
-                }
-            } else 
-            */
-            if (args[i].equalsIgnoreCase("-l")) { // list of files
-                if ( (i + 1) < args.length ) {
-                    listFile = args[i + 1];
-                    i++;
-                } else {
-                    error = true;
-                }
-            }else if (args[i].equalsIgnoreCase("-f")) { // list of files 
-                if ( (i + 1) < args.length ) {
-                    folderPath = args[i + 1];
-                    i++;
-                } else {
-                    error = true;
-                }
-            }
-            // else if (args[i].equalsIgnoreCase("-f")) { // working folder
-            // }
-        }
+      
         if (error) {
             System.out.println(USAGE);
             System.exit(0);
@@ -129,27 +99,13 @@ public class LanguageIdentifierTool {
 
         // initialize language identifier
         LanguageIdentifierTool id = new LanguageIdentifierTool(langs);
-       // String result = "";
-        
+ 
         if (listFile != null){
-          // System.out.println("" + listFile);
            id.processFilesInTheList(folderPath, listFile);
         }else{
            id.processFiles(inputFile);   
         }
-        // by default, the output is printed on the screen
-        // output the results into a file (append to the end)    
-    /*    if (outfile != null) {
-            FileWriter writer;
-            try {
-                writer = new FileWriter(new File(outfile), true);
-                writer.append(result);
-                writer.close();
-            } catch (IOException ex) {
-                System.out.println("Error: Can not write to the output file:" + outfile);
-            }
-        }*/
-       // System.out.println("Success");
+ 
     }
 
     public LanguageIdentifierTool(String languages[]) {
@@ -166,7 +122,6 @@ public class LanguageIdentifierTool {
     private void initializeTextPreprocessors() {
         tps = new TextPreprocessor[languages.length];
 
-      //  TextPreprocessor tpwesteu = new TextPreprocessorWesternEurope();
         TextPreprocessor tpuni = new TextPreprocessorUniversal(); // it does not exclude punctuation marks and uses English locale
         tpuni.ELIMINATE_NUMERIC_CHARS = true;
         tpuni.ELIMINATE_PUNCTUATION = true;
@@ -174,13 +129,7 @@ public class LanguageIdentifierTool {
         for (int i = 0; i < languages.length; i++) {
             String lang = languages[i].toLowerCase();
 
-         /*   if (TextPreprocessor.isWesternEuropeanLanguage(lang)) {
-                tps[i] = tpwesteu;
-            } else {
-                tps[i] = tpuni;
-            }
-         */
-            tps[i] = tpuni; // this helps determine the underdetermined text which includes characters in other scripts          
+            tps[i] = tpuni; // this helps determine the undetermined text which includes characters in other scripts          
             
         }
         sortLanguagesBasedOnTextPrerocessors();
@@ -228,13 +177,7 @@ public class LanguageIdentifierTool {
             IndexEntry ent = curlist.get(j);
             total += ent.getFrequency();
         }
-        // reset the frequencies after using term counts
-  /*      for (int i = 0; i < stopWordLists.length; i++) {
-         ArrayList<IndexEntry> curlist = stopWordLists[i];
-         for (int j = 0; j < curlist.size(); j++) {
-         curlist.get(j).setFrequency(0);
-         }
-         } */
+ 
         return total;
     }
 
@@ -301,7 +244,7 @@ public class LanguageIdentifierTool {
         
         for (int i = 0; i < languages.length; i++) {
 
-            // preprocess the file: the question is which text preprocessor to use?
+            // pre-process the file: the question is which text preprocessor to use?
             // if the preprocessor object is the same as the one before, then no need to retokenize the file again.
             // PERFORMANCE HINT:
             // Languages using the same TextPreprocessor object must follow each other in the languages list for maximum performance
@@ -309,7 +252,7 @@ public class LanguageIdentifierTool {
 
             if (i == 0 || (i > 0 && tps[i - 1] != tps[i])) {
 
-                // preprocess and tokenize the document
+                // pre-process and tokenize the document
                 text = TextPreprocessor.readFile(file);
                 text = tps[i].processText(text);
                 text = tps[i].toLowerCase(text);
@@ -341,11 +284,9 @@ public class LanguageIdentifierTool {
     }
 
     public double processFile2(File file, double[] distribution) {
-        // String result = "";
-        //double accuracy = 0;
+ 
         double values[] = countStopWords(file);
-        //   result += file.getAbsolutePath();
-        //  System.out.println("Processing ->" + result);
+ 
         double unknownLanguageRatio, total = 0.0;
         //  ESTIMATE THE DISTRIBUTION OF LANGUAGES GIVEN A FILE
         //  double[] distribution = new double[values.length];
@@ -361,16 +302,14 @@ public class LanguageIdentifierTool {
         if (unknownLanguageRatio < 0.0f) {
             unknownLanguageRatio = 0.0f;
         }
-        
-
+    
         // normalize distribution
         total += unknownLanguageRatio;
         for (int i = 0; i < values.length; i++) {
             distribution[i] = distribution[i] / total;
         }
         unknownLanguageRatio = unknownLanguageRatio / total;
-
-        
+       
         // =============================================
         // eliminate languages whose percentage is less than 1 percent and renormalize
         total = 0.0;
@@ -399,8 +338,7 @@ public class LanguageIdentifierTool {
     private String processFile2(File file) {
         String result = "";
         result += file.getAbsolutePath();
-        //System.out.println("Processing ->" + result);
-        
+          
         // ESTIMATE THE DISTRIBUTION OF LANGUAGES GIVEN A FILE
         double[] distribution = new double[languages.length];
         double unknownLanguageRatio = processFile2(file, distribution);
@@ -424,12 +362,9 @@ public class LanguageIdentifierTool {
            
             while((strLine = br.readLine())!= null) {
                 File file;
-               // if ( folder.length() == 0 ){
-              //      file = new File(strLine.trim());
-               // }else{
-                    file = new File(folder + "/" + strLine.trim());
-               // }
-                
+ 
+                file = new File(folder + "/" + strLine.trim());
+              
                 if (file.exists()){
                     String r = processFile2(file);
                     System.out.print(r);
@@ -443,8 +378,7 @@ public class LanguageIdentifierTool {
     }
 
     private void processFiles(String list[]) {
-
-      //  StringBuilder results = new StringBuilder();
+ 
         for (int i = 0; i < list.length; i++) {
             File file = new File(list[i]);
             if (file.exists()) {
@@ -454,19 +388,17 @@ public class LanguageIdentifierTool {
                         if (!files[j].isDirectory()) {
                             String r = processFile2(files[j]);
                             System.out.print(r);
-              //              results.append(r); // TODO: append to the output file 
                         }
                     }
                 } else {
                     String r =processFile2(file);
                     System.out.print(r);
-            //        results.append(processFile2(file));
                 }
             } else {
                 System.out.println("LanguageIndentifier: Input folder or file \"" + file.getAbsolutePath() + "\" either does not exist");
             }
         }
-    //    return results.toString();
+ 
     }
 
     public void printLanguages() {

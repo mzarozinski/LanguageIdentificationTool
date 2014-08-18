@@ -50,11 +50,10 @@ public class IndexEntry {
         return false;
    }
     public boolean setNumOfTokens(int n){
-       //if (n >= 0){
-            numOfTokens = n;
-            return true;
-       //}
-       //return false;
+
+		numOfTokens = n;
+		return true;
+
     }
     public void setTerm(String t){
         term = t;

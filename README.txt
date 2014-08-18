@@ -3,6 +3,7 @@ Copyright (C) 2013 by the University of Massachusetts at Amherst
 released under the GNU  GPL v3.0 (see GNU_license.txt)
 
 Written by I. Zeki Yalniz
+Maintained by Michael Zarozinski (MichaelZ@cs.umass.edu)
 
 ABOUT THE TOOL
 ==============
@@ -23,7 +24,7 @@ This code is a prototype and still under development. It can be easily extended 
 2 - learning a stopword list along with term probabilities for the intended languages.
 
 Sample command line( See also the main method for sample usage ):
-"LanguageIdentifier /desktop/myfolder/ -o output.txt"
+"LanguageIdentifier /desktop/myfolder/"
 
 ACKNOWLEDGMENT
 ==============
@@ -48,21 +49,14 @@ HOW TO USE THE TOOL
 
 1 - COMMAND LINE INTERFACE:
 ---------------------------
-USAGE: LanguageIdentifierTool <inputFileORfolderName> <options>
+USAGE: LanguageIdentifierTool <inputFileORfolderName>  
 
 PARAMETERS:
 <inputFileORfolderName>
 	full path for input text file or folder name. If the input filename is a folder, all the files in the folder are processed RECURSIVELY.
-OPTIONAL:
--o <outputfilename>
-	append the output to the specified file(default: screen output)
-
+ 
 SAMPLE USAGE(s):
-LanguageIdentifier /desktop/myfolder/ -o output.txt
+LanguageIdentifier /desktop/myfolder/ 
 SAMPLE OUTPUT:
 /desktop/myfolder/myfile.txt	eng 0.7%	ger 97.4%	fre 0.1% ... 
-
-
-2 - JAVA API
---------------------------
-To be added soon. 
+ 

@@ -25,7 +25,7 @@ import java.util.Locale;
 public class TextPreprocessorWesternEurope extends TextPreprocessor{
 
     public TextPreprocessorWesternEurope(){
-         locale = new Locale("en", "US"); // ?
+         locale = new Locale("en", "US");  
     }
 
     public String processText(String s) {
@@ -37,14 +37,13 @@ public class TextPreprocessorWesternEurope extends TextPreprocessor{
         for (int i = 0; i < charAr.length; i++) {
             char ch = charAr[i];
 
-            // connect phonemes of words which are seperated by a dash
+            // connect phonemes of words which are separated by a dash
             // -------------------------------------------------------------
             // MERGE HYPHENATED WORDS:
             if (ch == '-' && i < (charAr.length - 1)) {
 
                 // CASE1: check if characters on the left and right hand side are valid, if so merge.
                 if( isValidChar(charAr[i+1]) && i >= 1 && isValidChar(charAr[i-1]) ){
-                     // i = j-1;
                      continue;
                 }
 
@@ -58,14 +57,13 @@ public class TextPreprocessorWesternEurope extends TextPreprocessor{
                     break;
                 }
                 if (charAr[j] == '\n' || charAr[j] == '\r') {
-                //    j++;
                     i = j;
                     continue;
                 }
-                //i = j-1;
+
             }
 
-            // always keep apostrophy if it is between two chars
+            // always keep apostrophe if it is between two chars
             if (ch == '\'') {
                 if ( i > 0 && (i+1) < charAr.length && isValidChar(charAr[i-1]) && isValidChar(charAr[i+1]) ){
                     output[backIndex] = ch;

@@ -34,8 +34,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -67,10 +66,9 @@ public abstract class TextPreprocessor {
             ir.close();
             fi.close();
         } catch (IOException ex) {
-           // Logger.getLogger(TextPreprocessor.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("TextPreprocessor: can not read file ->" + filename);
         }
-        //        System.out.println("encoding = " + encoding);
+
         return encoding;
     }
 
@@ -87,12 +85,12 @@ public abstract class TextPreprocessor {
             input.close();
             output.close();
         } catch (Exception ex) {
-           // Logger.getLogger(TextPreprocessor.class.getName()).log(Level.SEVERE, null, ex);
+
         } finally {
             try {
                 input.close();
             } catch (IOException ex) {
-            //    Logger.getLogger(TextPreprocessor.class.getName()).log(Level.SEVERE, null, ex);
+
             }
         }
     }
@@ -141,7 +139,7 @@ public abstract class TextPreprocessor {
     public static ArrayList<String> getFilenamesRecursive(String rootFolder){
          ArrayList<String> result = new  ArrayList<String>(10000);
          File [] files = null;
-        // MyFileFilter filter = new MyFileFilter(contains);
+
          File folderfile = new File(rootFolder);
 
          if(folderfile.isDirectory()){
